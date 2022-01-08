@@ -225,10 +225,6 @@ export interface ExchangeSetting {
 }
 
 export interface SaturnLowLevelApi {
-  /** Returns a Web3 Token Contract instance `(ERC20/ERC223)` */
-  createTokenContract: (tokenAddress: string) => Contract | Exchange;
-  /** Returns a Web3 Exchange Contract instance */
-  createExchangeContract: (exchangeAddress: string) => Contract | Exchange;
   /** Return current `ExchangeSetting[]` */
   getExchangeSettings: () => ExchangeSetting[];
   /** Returns an array of all active Exchange Contract addresses */
