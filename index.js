@@ -1,3 +1,8 @@
+"use strict"
+Object.defineProperty(exports, "__esModule", { value: true })
+
+const exchanges = require('./exchanges')
+
 function checker (obj, index = 'buys', verifier = exports.isTrade) {
   return index in obj && Array.isArray(obj[index]) && verifier(obj[index][0])
 }
@@ -50,8 +55,30 @@ exports.isExchangeEventName = function (obj) {
   return exports.exchangeEventNames.includes(obj)
 }
 
-exports.blockchains = ['ETC', 'ETH', 'PHX', 'DAO', 'AOA', 'AOAT']
+exports.blockchains = ['ETC', 'ETH', 'PHX', 'DAO', 'AOA', 'AOAT', 'ROPSTEN']
 
 exports.isSupportedBlockchain = function (obj) {
   return exports.blockchains.includes(obj)
+}
+
+exports.exchanges = {
+  ETC: exchanges.etc,
+  ETH: exchanges.eth,
+  AOA: exchanges.aoa,
+
+  PHX: exchanges.phx,
+  DAO: exchanges.dao,
+  AOAT: exchanges.aoat,
+  ROPSTEN: exchanges.ropsten,
+
+  get: function (blockchain, contractName) {
+    let dataset = this[blockchain.toUpperCase()] || []
+    if (contractName) dataset = dataset
+      .filter(x => x.name.toLowerCase() === contractName.toLowerCase())
+  
+    return dataset.sort((a, b) => a.blocknumber - b.blocknumber)
+  },
+  latest: function (blockchain) {
+    return this.get(blockchain)[0]
+  }
 }

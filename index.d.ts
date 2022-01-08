@@ -1,6 +1,20 @@
 export declare const blockchains: Blockchains[]
 export declare const exchangeEventNames: ExchangeEventNames[]
 
+export declare const exchanges: {
+  ETC: ExchangeSetting[],
+  ETH: ExchangeSetting[],
+  AOA: ExchangeSetting[],
+
+  PHX: ExchangeSetting[],
+  DAO: ExchangeSetting[],
+  AOAT: ExchangeSetting[],
+  ROPSTEN: ExchangeSetting[],
+
+  get: (blockchain: Blockchains, contractName: ContractName) => ExchangeSetting[]
+  latest: (blockchain: Blockchains) => ExchangeSetting
+}
+
 export declare function isOrder(obj: any): obj is Order;
 export declare function isTrade(obj: any): obj is Trade;
 export declare function isOrderbook(obj: any): obj is Orderbook;
@@ -204,18 +218,20 @@ export interface TraderSummary {
   orders?: Order[]
   trades?: Tradebook
 }
+
+export type ContractName = 'Dione' | 'Atlas' | 'Enceladus' | 'Mimas'
+
 export interface ExchangeSetting {
-  // dev
   [index: string]: any;
   contractAddress: string;
   startBlock: number;
   deployHash?: string
   deployer?: string
   delployTime?: string
-  name: string;
-  abi: any;
+  name: ContractName
   blockchain: Blockchains
   description?: string
+  abi?: any;
   topics: {
     newOrder: string;
     orderCancelled: string;
