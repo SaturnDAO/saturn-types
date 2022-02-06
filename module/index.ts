@@ -1,31 +1,64 @@
-export declare const blockchains: Blockchains[]
-export declare const exchangeEventNames: ExchangeEventNames[]
+export { default as exchanges } from './exchanges'
 
-export declare const exchanges: {
-  ETC: ExchangeSetting[],
-  ETH: ExchangeSetting[],
-  AOA: ExchangeSetting[],
-
-  PHX: ExchangeSetting[],
-  DAO: ExchangeSetting[],
-  AOAT: ExchangeSetting[],
-  ROPSTEN: ExchangeSetting[],
-
-  get: (blockchain: Blockchains, contractName: ContractName) => ExchangeSetting[]
-  latest: (blockchain: Blockchains) => ExchangeSetting
+function checker (obj: any, index = 'buys', verifier: any = isTrade) {
+  return index in obj && Array.isArray(obj[index]) && verifier(obj[index][0])
 }
 
-export declare function isOrder(obj: any): obj is Order;
-export declare function isTrade(obj: any): obj is Trade;
-export declare function isOrderbook(obj: any): obj is Orderbook;
-export declare function isTradebook(obj: any): obj is Tradebook;
-export declare function isTokenSummary(obj: any): obj is TokenSummary;
-export declare function isDetailedTokenSummary(obj: any): obj is DetailedTokenSummary;
+export const blockchains: Blockchains[] = ['ETC', 'ETH', 'PHX', 'DAO', 'AOA', 'AOAT', 'ROPSTEN']
 
-export declare function isExchangeEventName(obj: any): obj is ExchangeEventNames;
-export declare function isSupportedBlockchain(obj: any): obj is Blockchains;
+export const exchangeEventNames: ExchangeEventNames[] = ['NewOrder', 'Trade', 'OrderCancelled', 'Mined', 'OrderFulfilled']
 
-export type Blockchains = 'ETC' | 'ETH' | 'PHX' | 'DAO' | 'AOA' | 'AOAT'
+export function isOrder (obj: any): obj is Order {
+  return (
+    'active' in obj && 'selltoken' in obj && 'type' in obj && 'order_id' in obj
+  )
+}
+
+export function isTrade(obj: any): obj is Trade {
+  return (
+    'active' in obj && 'buytokenamount' in obj && 'buyer' in obj
+  )
+}
+
+export function isOrderbook(obj: any): obj is Orderbook {
+  return (
+    checker(obj, 'buys', isOrder) &&
+    checker(obj, 'sells', isOrder)
+  )
+}
+
+export function isTradebook(obj: any): obj is Tradebook {
+  return (
+    checker(obj, 'buys', isTrade) &&
+    checker(obj, 'sells', isTrade)
+  )
+}
+
+export function isTokenSummary(obj: any): obj is TokenSummary {
+  return (
+    'address' in obj && 'decimals' in obj && 'name' in obj && 'symbol' in obj
+  )
+}
+
+export function isDetailedTokenSummary(obj: any): obj is DetailedTokenSummary {
+  return (
+    isTokenSummary(obj) && 'blockchain' in obj && (
+      'best_buy_order' in obj || 'best_buy_price' in obj ||
+      'best_buy_order_tx' in obj || 'best_sell_order' in obj ||
+      'best_sell_price' in obj || 'best_sell_order_tx' in obj
+    )
+  )
+}
+
+export function isExchangeEventName(obj: any): obj is ExchangeEventNames {
+  return exchangeEventNames.includes(obj)
+}
+
+export function isSupportedBlockchain(obj: any): obj is Blockchains {
+  return blockchains.includes(obj)
+}
+
+export type Blockchains = 'ETC' | 'ETH' | 'PHX' | 'DAO' | 'AOA' | 'AOAT' | 'ROPSTEN'
 export type TokenStandard = 'ERC223' | 'ERC20' | 'ERC721'
 export type LogFunction = (...values: any) => void
 

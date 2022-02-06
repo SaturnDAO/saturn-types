@@ -1,7 +1,6 @@
-"use strict"
-Object.defineProperty(exports, "__esModule", { value: true })
+import type { Blockchains, ContractName, ExchangeSetting } from '.'
 
-exports.etc = [
+export const etc: ExchangeSetting[] = [
   {
     contractAddress: '0x5ef83ab1155786f146c5a00722bef7ab683dc0de',
     startBlock: 9742381,
@@ -52,7 +51,7 @@ exports.etc = [
   },
 ]
 
-exports.eth = [
+export const eth: ExchangeSetting[] = [
   {
     contractAddress: '0xaa5bbd5a177a588b9f213505ca3740b444dbd586',
     startBlock: 9443707,
@@ -103,13 +102,13 @@ exports.eth = [
   },
 ]
 
-exports.aoa = []
+export const aoa: ExchangeSetting[] = []
 
 // Testnets
-exports.phx = []
-exports.dao = []
+export const phx: ExchangeSetting[] = []
+export const dao: ExchangeSetting[] = []
 
-exports.aoat = [
+export const aoat: ExchangeSetting[] = [
   {
     contractAddress: '0xf656f14c2e2aa3150953a5e43b9ce572f85afbc2',
     startBlock: 69530485,
@@ -125,4 +124,26 @@ exports.aoat = [
   }
 ]
 
-exports.ropsten = []
+export const ropsten: ExchangeSetting[] = []
+
+export default {
+  ETC: etc,
+  ETH: eth,
+  AOA: aoa,
+
+  PHX: phx,
+  DAO: dao,
+  AOAT: aoat,
+  ROPSTEN: ropsten,
+
+  get: function (blockchain: Blockchains, contractName?: ContractName): ExchangeSetting[] {
+    let dataset: ExchangeSetting[] = this[blockchain] || []
+    if (contractName) dataset = dataset
+      .filter(x => x.name.toLowerCase() === contractName.toLowerCase())
+  
+    return dataset.sort((a, b) => a.blocknumber - b.blocknumber)
+  },
+  latest: function (blockchain: Blockchains): ExchangeSetting {
+    return this.get(blockchain)[0]
+  }
+}

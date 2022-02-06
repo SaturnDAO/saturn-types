@@ -1,0 +1,17 @@
+hardhat.config.ts
+scripts
+node_modules
+test
+typechain
+cache
+artifacts
+module
+.env
+.dev
+.eslintignore
+.eslintrc.js
+.prettierignore
+.solhint.json
+.solhintignore
+yarn.lock
+tsconfig.prod.json

@@ -1,1 +1,15 @@
-test.js
+node_modules
+.env
+.dev
+yarn.lock
+coverage
+coverage.json
+typechain
+/**.js
+/**.d.ts
+factories
+
+#Hardhat files
+cache
+artifacts
+yarn.lock
