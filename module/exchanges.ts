@@ -1,4 +1,5 @@
 import type { Blockchains, ContractName, ExchangeSetting } from '.'
+import { Mimas, Saturn } from './abis'
 
 export const etc: ExchangeSetting[] = [
   {
@@ -10,6 +11,7 @@ export const etc: ExchangeSetting[] = [
     name: 'Atlas',
     blockchain: 'ETC',
     description: undefined,
+    abi: Saturn,
     topics: {
       newOrder: '0x9684ab37f360879637d39ea3a41f58c0705a15f80d518ec92bd1c7383ef8a61a',
       orderCancelled: '0xaa2a006d186dc89a3d6851834c85d16226329ac40bcad6531a5756a38ed1c90f',
@@ -26,6 +28,7 @@ export const etc: ExchangeSetting[] = [
     name: 'Enceladus',
     blockchain: 'ETC',
     description: undefined,
+    abi: Mimas,
     topics: {
       newOrder: '0x506cb18801692179462f2b7b4b6f10bea763984f94a1f1f3cd858e3a645b2329',
       orderCancelled: '0xaa2a006d186dc89a3d6851834c85d16226329ac40bcad6531a5756a38ed1c90f',
@@ -42,6 +45,7 @@ export const etc: ExchangeSetting[] = [
     name: 'Mimas',
     blockchain: 'ETC',
     description: undefined,
+    abi: Mimas,
     topics: {
       newOrder: '0x506cb18801692179462f2b7b4b6f10bea763984f94a1f1f3cd858e3a645b2329',
       orderCancelled: '0xaa2a006d186dc89a3d6851834c85d16226329ac40bcad6531a5756a38ed1c90f',
@@ -61,6 +65,7 @@ export const eth: ExchangeSetting[] = [
     name: 'Atlas',
     blockchain: 'ETH',
     description: undefined,
+    abi: Saturn,
     topics: {
       newOrder: '0x9684ab37f360879637d39ea3a41f58c0705a15f80d518ec92bd1c7383ef8a61a',
       orderCancelled: '0xaa2a006d186dc89a3d6851834c85d16226329ac40bcad6531a5756a38ed1c90f',
@@ -77,6 +82,7 @@ export const eth: ExchangeSetting[] = [
     name: 'Enceladus',
     blockchain: 'ETH',
     description: undefined,
+    abi: Mimas,
     topics: {
       newOrder: '0x506cb18801692179462f2b7b4b6f10bea763984f94a1f1f3cd858e3a645b2329',
       orderCancelled: '0xaa2a006d186dc89a3d6851834c85d16226329ac40bcad6531a5756a38ed1c90f',
@@ -93,6 +99,7 @@ export const eth: ExchangeSetting[] = [
     name: 'Mimas',
     blockchain: 'ETH',
     description: undefined,
+    abi: Saturn,
     topics: {
       newOrder: '0x506cb18801692179462f2b7b4b6f10bea763984f94a1f1f3cd858e3a645b2329',
       orderCancelled: '0xaa2a006d186dc89a3d6851834c85d16226329ac40bcad6531a5756a38ed1c90f',
@@ -145,5 +152,13 @@ export default {
   },
   latest: function (blockchain: Blockchains): ExchangeSetting {
     return this.get(blockchain)[0]
+  },
+  getAbi: function (exchangeAddress: string, blockchain?: Blockchains) {
+    const search = blockchain ? this[blockchain] : [
+      ...etc, ...eth, ...aoa, ...phx, ...dao, ...aoat, ...ropsten
+    ]
+    
+    return search
+      .filter(e => e.contractAddress === exchangeAddress.toLowerCase()).pop()
   }
 }

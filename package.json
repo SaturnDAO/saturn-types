@@ -1,11 +1,12 @@
 {
   "name": "saturn-types",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "reinstall": "rimraf node_modules yarn.lock",
+    "build": "rimraf *.js *.d.ts && tsc"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   "homepage": "https://github.com/SaturnDAO/saturn-types#readme",
   "devDependencies": {
     "@types/node": "^17.0.15",
+    "rimraf": "^3.0.2",
     "typescript": "^4.5.5"
   }
 }

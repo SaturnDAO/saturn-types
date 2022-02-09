@@ -1,3 +1,4 @@
+
 export { default as exchanges } from './exchanges'
 
 function checker (obj: any, index = 'buys', verifier: any = isTrade) {
@@ -58,8 +59,46 @@ export function isSupportedBlockchain(obj: any): obj is Blockchains {
   return blockchains.includes(obj)
 }
 
+
 export type Blockchains = 'ETC' | 'ETH' | 'PHX' | 'DAO' | 'AOA' | 'AOAT' | 'ROPSTEN'
-export type TokenStandard = 'ERC223' | 'ERC20' | 'ERC721'
+
+export function chainById (chainId: number | string): Blockchains | undefined {
+  switch(Number(chainId)) {
+    case 61: return 'ETC'
+    case 1: return 'ETH'
+    case 4669: return 'PHX'
+    case 1313161554: return 'AOA'
+    case 1313161555: return 'AOAT'
+  }
+}
+
+export const chainToId = (chain: Blockchains): number => {
+  switch(chain){
+    case 'ETH': return 1
+    case 'ETC': return 61
+    case 'PHX': return 4669
+    case 'AOA': return 1313161554
+    case 'AOAT': return 1313161555
+    default: throw new Error('UNSUPPORTED CHAIN')
+  }
+}
+
+
+export const pickTopicFromSetting = (event: ExchangeEventNames, exchange: ExchangeSetting) => {
+  switch(event) {
+    case 'NewOrder':
+      return exchange.topics.newOrder
+    case 'OrderCancelled':
+      return exchange.topics.orderCancelled
+    case 'Trade':
+      return exchange.topics.trade
+    case 'Mined':
+      return exchange.topics.mined
+  }
+}
+
+export type NFTStandard = 'ERC721' | 'ERC1155' | 'ERC777'
+export type TokenStandard = 'ERC223' | 'ERC20' | NFTStandard
 export type LogFunction = (...values: any) => void
 
 export type ExchangeEventNames = 'NewOrder' | 'Trade' | 'OrderCancelled' | 'Mined' | 'OrderFulfilled'
